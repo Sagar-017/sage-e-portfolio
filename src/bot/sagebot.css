@@ -1,0 +1,88 @@
+/* ---- stage: the strip SAGE-E lives on. His feet sit on its bottom edge. ---- */
+.sb-stage { position: relative; width: 100%; height: 216px; pointer-events: none; }
+.sb-stage.is-compact { height: 132px; }
+.sb-bot { position: absolute; left: 50%; bottom: 0; width: 170px; margin-left: -85px; will-change: transform; }
+.is-compact .sb-bot { width: 100px; margin-left: -50px; }
+
+.sb-svg { display: block; width: 100%; height: auto; overflow: visible; pointer-events: auto; cursor: grab; touch-action: none; outline: none; -webkit-tap-highlight-color: transparent; }
+.sb-svg:active { cursor: grabbing; }
+.sb-svg:focus-visible .sb-shell { stroke: #f3c27a; }
+
+/* ---- materials ---- */
+.sb-shell { fill: #ebe0c9; stroke: #5b4936; stroke-width: 2.2; }
+.sb-shade { fill: #5b4936; opacity: .12; }
+.sb-rust { fill: #a4542f; opacity: .38; }
+.sb-metal { fill: #8e7860; stroke: #4c3d2e; stroke-width: 1.6; }
+.sb-joint { fill: #6c5a46; stroke: #3d3126; stroke-width: 1.4; }
+.sb-foot { fill: #7a6550; stroke: #3d3126; stroke-width: 1.8; }
+.sb-arm { stroke: #4c3d2e; stroke-width: 1.6; }
+.sb-haz-a { fill: #d9cdb4; }
+.sb-haz-b { fill: #6e6457; }
+.sb-wire { stroke: #4c3d2e; stroke-width: 2.4; stroke-linecap: round; }
+.sb-bulb { fill: #6b5a45; stroke: #3d3126; stroke-width: 1.4; transition: fill .3s; }
+.sb-lens { fill: #23201c; }
+.sb-lens-rim { fill: none; stroke: #6f5c46; stroke-width: 3; }
+.sb-iris { fill: #3a3631; stroke: #c98b4b; stroke-width: 2; transition: stroke .3s, fill .3s; }
+.sb-pupil { fill: #0c0b0a; }
+.sb-shine { fill: #fff; opacity: .9; }
+.sb-lid { fill: #ebe0c9; }
+.sb-brow { fill: #8e7860; stroke: #4c3d2e; stroke-width: 1.4; }
+.sb-happy { fill: none; stroke: #ffb04a; stroke-width: 4; stroke-linecap: round; }
+.sb-screen { fill: #1d1b17; stroke: #5b4936; stroke-width: 2; transition: fill .4s; }
+.sb-label { font: 700 10.5px 'DM Sans', system-ui, sans-serif; letter-spacing: .5px; fill: #7d3b26; }
+.sb-label-e { fill: #c0392b; }
+.sb-slot { fill: #5b4936; opacity: .5; }
+.sb-shadow { fill: #000; opacity: .5; filter: blur(3px); transform-box: fill-box; transform-origin: center; }
+.sb-aura { opacity: 0; transition: opacity .6s; pointer-events: none; }
+
+/* ---- screen faces ---- */
+.sb-pulse { fill: none; stroke: #8fd17a; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 90; animation: sb-pulse 2.4s linear infinite; }
+.sb-dots circle { fill: #ffb347; animation: sb-dot 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.sb-dots circle:nth-child(2) { animation-delay: .15s; }
+.sb-dots circle:nth-child(3) { animation-delay: .3s; }
+.sb-bars rect { fill: #ffb347; transform-box: fill-box; transform-origin: center; animation: sb-eq .5s ease-in-out infinite alternate; }
+.sb-bars rect:nth-child(2) { animation-delay: .12s; } .sb-bars rect:nth-child(3) { animation-delay: .24s; }
+.sb-bars rect:nth-child(4) { animation-delay: .08s; } .sb-bars rect:nth-child(5) { animation-delay: .2s; }
+.sb-heart { fill: #ff7a59; transform-box: fill-box; transform-origin: center; animation: sb-beat 1s ease-in-out infinite; }
+.sb-ears circle { fill: #8fd17a; animation: sb-dot 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.sb-ears circle:nth-child(2) { animation-delay: .2s; } .sb-ears circle:nth-child(3) { animation-delay: .4s; }
+.sb-screen-text { font: 11px 'DM Mono', monospace; fill: #8a8577; }
+
+/* ---- moods ---- */
+.mood-thinking .sb-bulb { fill: #ffb347; animation: sb-blink .7s steps(2) infinite; }
+.mood-thinking .sb-screen, .mood-talking .sb-screen { fill: #3a2913; }
+.mood-happy .sb-screen, .mood-puppy .sb-screen { fill: #3b2216; }
+.mood-happy .sb-aura { opacity: 1; }
+.mood-happy .sb-iris, .mood-puppy .sb-iris { stroke: #ffb04a; }
+.mood-happy .sb-bulb, .mood-talking .sb-bulb { fill: #ffcf7a; }
+.mood-sleep .sb-iris { stroke: #6a5a48; }
+
+/* ---- speech bubble ---- */
+.sb-bubble {
+  position: absolute; left: 50%; bottom: calc(100% - 10px); transform: translateX(-50%);
+  width: max-content; max-width: 230px; padding: 8px 12px; border-radius: 14px;
+  background: #f4ead6; color: #2a241c; font: 500 12.5px/1.4 'DM Sans', system-ui, sans-serif; text-align: center;
+  box-shadow: 0 8px 24px #0006; pointer-events: none; z-index: 5;
+  animation: sb-pop .32s cubic-bezier(.3, 1.6, .5, 1);
+}
+.sb-bubble::after { content: ''; position: absolute; left: 50%; top: 100%; margin-left: -7px; border: 7px solid transparent; border-top-color: #f4ead6; }
+.is-compact .sb-bubble { font-size: 11.5px; max-width: 190px; }
+
+.sb-zzz { position: absolute; top: 10px; right: -6px; font: 600 15px 'DM Mono', monospace; color: #b9b19f; pointer-events: none; }
+.sb-zzz span { position: absolute; opacity: 0; animation: sb-z 2.4s ease-out infinite; }
+.sb-zzz span:nth-child(2) { animation-delay: .8s; font-size: 18px; }
+.sb-zzz span:nth-child(3) { animation-delay: 1.6s; font-size: 22px; }
+
+@keyframes sb-pulse { from { stroke-dashoffset: 180; } to { stroke-dashoffset: 0; } }
+@keyframes sb-dot { 0%, 100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(-4px); opacity: 1; } }
+@keyframes sb-eq { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
+@keyframes sb-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } }
+@keyframes sb-blink { 50% { fill: #6b5a45; } }
+@keyframes sb-pop { from { opacity: 0; transform: translateX(-50%) translateY(6px) scale(.7); } }
+@keyframes sb-z { 0% { opacity: 0; transform: translate(0, 0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(16px, -34px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-pulse, .sb-dots circle, .sb-bars rect, .sb-heart, .sb-ears circle, .sb-zzz span, .sb-bubble, .mood-thinking .sb-bulb { animation: none !important; }
+  .sb-zzz span { opacity: 1; position: static; }
+}
+@media (max-height: 760px) { .sb-stage:not(.is-compact) { height: 170px; } .sb-stage:not(.is-compact) .sb-bot { width: 132px; margin-left: -66px; } }

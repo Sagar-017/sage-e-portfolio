@@ -1,0 +1,10 @@
+# dependencies and build output (recreated by npm install / npm run build)
+node_modules/
+dist/
+*.tsbuildinfo
+
+# local / OS files
+.DS_Store
+.env
+.env.local
+*.log
