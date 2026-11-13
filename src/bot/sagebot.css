@@ -1,61 +1,20 @@
 /* ---- stage: the strip SAGE-E lives on. His feet sit on its bottom edge. ---- */
 .sb-stage { position: relative; width: 100%; height: 216px; pointer-events: none; }
 .sb-stage.is-compact { height: 132px; }
-.sb-bot { position: absolute; left: 50%; bottom: 0; width: 170px; margin-left: -85px; will-change: transform; }
+.sb-bot { position: absolute; left: 50%; bottom: 0; width: 170px; margin-left: -85px; will-change: transform; transform-origin: 50% 100%; }
 .is-compact .sb-bot { width: 100px; margin-left: -50px; }
 
-.sb-svg { display: block; width: 100%; height: auto; overflow: visible; pointer-events: auto; cursor: grab; touch-action: none; outline: none; -webkit-tap-highlight-color: transparent; }
-.sb-svg:active { cursor: grabbing; }
-.sb-svg:focus-visible .sb-shell { stroke: #f3c27a; }
+/* Hit box keeps the old SVG footprint (200×240 units); the WebGL canvas overflows it so
+   raised arms and hops never clip. Canvas = world x ∈ [-180,180], y ∈ [-10,390]. */
+.sb-hit { position: relative; width: 100%; aspect-ratio: 200 / 240; pointer-events: auto; cursor: grab; touch-action: none; outline: none; border-radius: 24px; -webkit-tap-highlight-color: transparent; }
+.sb-hit:active { cursor: grabbing; }
+.sb-hit:focus-visible { box-shadow: 0 0 0 2px #f3c27a; }
+.sb-gl { position: absolute; left: -40%; right: -40%; bottom: 0; aspect-ratio: 360 / 400; pointer-events: none; }
+.sb-gl canvas { display: block; width: 100%; height: 100%; }
 
-/* ---- materials ---- */
-.sb-shell { fill: #ebe0c9; stroke: #5b4936; stroke-width: 2.2; }
-.sb-shade { fill: #5b4936; opacity: .12; }
-.sb-rust { fill: #a4542f; opacity: .38; }
-.sb-metal { fill: #8e7860; stroke: #4c3d2e; stroke-width: 1.6; }
-.sb-joint { fill: #6c5a46; stroke: #3d3126; stroke-width: 1.4; }
-.sb-foot { fill: #7a6550; stroke: #3d3126; stroke-width: 1.8; }
-.sb-arm { stroke: #4c3d2e; stroke-width: 1.6; }
-.sb-haz-a { fill: #d9cdb4; }
-.sb-haz-b { fill: #6e6457; }
-.sb-wire { stroke: #4c3d2e; stroke-width: 2.4; stroke-linecap: round; }
-.sb-bulb { fill: #6b5a45; stroke: #3d3126; stroke-width: 1.4; transition: fill .3s; }
-.sb-lens { fill: #23201c; }
-.sb-lens-rim { fill: none; stroke: #6f5c46; stroke-width: 3; }
-.sb-iris { fill: #3a3631; stroke: #c98b4b; stroke-width: 2; transition: stroke .3s, fill .3s; }
-.sb-pupil { fill: #0c0b0a; }
-.sb-shine { fill: #fff; opacity: .9; }
-.sb-lid { fill: #ebe0c9; }
-.sb-brow { fill: #8e7860; stroke: #4c3d2e; stroke-width: 1.4; }
-.sb-happy { fill: none; stroke: #ffb04a; stroke-width: 4; stroke-linecap: round; }
-.sb-screen { fill: #1d1b17; stroke: #5b4936; stroke-width: 2; transition: fill .4s; }
-.sb-label { font: 700 10.5px 'DM Sans', system-ui, sans-serif; letter-spacing: .5px; fill: #7d3b26; }
-.sb-label-e { fill: #c0392b; }
-.sb-slot { fill: #5b4936; opacity: .5; }
-.sb-shadow { fill: #000; opacity: .5; filter: blur(3px); transform-box: fill-box; transform-origin: center; }
-.sb-aura { opacity: 0; transition: opacity .6s; pointer-events: none; }
-
-/* ---- screen faces ---- */
-.sb-pulse { fill: none; stroke: #8fd17a; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 90; animation: sb-pulse 2.4s linear infinite; }
-.sb-dots circle { fill: #ffb347; animation: sb-dot 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-.sb-dots circle:nth-child(2) { animation-delay: .15s; }
-.sb-dots circle:nth-child(3) { animation-delay: .3s; }
-.sb-bars rect { fill: #ffb347; transform-box: fill-box; transform-origin: center; animation: sb-eq .5s ease-in-out infinite alternate; }
-.sb-bars rect:nth-child(2) { animation-delay: .12s; } .sb-bars rect:nth-child(3) { animation-delay: .24s; }
-.sb-bars rect:nth-child(4) { animation-delay: .08s; } .sb-bars rect:nth-child(5) { animation-delay: .2s; }
-.sb-heart { fill: #ff7a59; transform-box: fill-box; transform-origin: center; animation: sb-beat 1s ease-in-out infinite; }
-.sb-ears circle { fill: #8fd17a; animation: sb-dot 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-.sb-ears circle:nth-child(2) { animation-delay: .2s; } .sb-ears circle:nth-child(3) { animation-delay: .4s; }
-.sb-screen-text { font: 11px 'DM Mono', monospace; fill: #8a8577; }
-
-/* ---- moods ---- */
-.mood-thinking .sb-bulb { fill: #ffb347; animation: sb-blink .7s steps(2) infinite; }
-.mood-thinking .sb-screen, .mood-talking .sb-screen { fill: #3a2913; }
-.mood-happy .sb-screen, .mood-puppy .sb-screen { fill: #3b2216; }
-.mood-happy .sb-aura { opacity: 1; }
-.mood-happy .sb-iris, .mood-puppy .sb-iris { stroke: #ffb04a; }
-.mood-happy .sb-bulb, .mood-talking .sb-bulb { fill: #ffcf7a; }
-.mood-sleep .sb-iris { stroke: #6a5a48; }
+/* while scaled down and hanging off the sound button, keep the bubble readable and to his left */
+.is-hanging .sb-bubble { left: auto; right: 100%; bottom: 40%; transform: scale(var(--inv, 1)); transform-origin: 100% 100%; animation: none; }
+.is-hanging .sb-bubble::after { display: none; }
 
 /* ---- speech bubble ---- */
 .sb-bubble {

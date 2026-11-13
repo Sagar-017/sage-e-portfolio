@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent, type MouseEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type FormEvent, type MouseEvent } from 'react';
 import {
   ArrowRight, Briefcase, Download, FileText, FolderOpen, GraduationCap, Heart, Menu, MessageCircle, RotateCcw,
-  Send, Sparkles, Trophy, UserRound, Wrench, X,
+  Send, Sparkles, Trophy, UserRound, Volume2, VolumeX, Wrench, X,
 } from 'lucide-react';
 import { SageBot, type BotAction, type BotMood, type SageBotHandle } from './bot/SageBot';
 import SectionPage from './pages/SectionPage';
+import { sfx } from './bot/sound';
 import { answers, detectIntent, jokes, profile, sectionById, sections, type SectionId } from './content';
 
 type Msg = { id: number; role: 'sage' | 'visitor'; text: string; open?: SectionId; invite?: boolean; chips?: string[] };
@@ -41,6 +42,13 @@ function makeReply(text: string): Reply {
 
 export default function App() {
   const bot = useRef<SageBotHandle>(null);
+  const soundBtnRef = useRef<HTMLButtonElement>(null);
+  const chatRef = useRef<HTMLElement>(null);
+  const muted = useSyncExternalStore(sfx.subscribe, sfx.getMuted);
+  const toggleSound = () => {
+    sfx.setMuted(!muted);
+    if (muted) sfx.voice('happy', true);
+  };
   const bodyRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -217,6 +225,15 @@ export default function App() {
         <header className="topbar">
           <button className="icon-btn only-mobile" onClick={() => setMobileNav(true)} aria-label="Open menu"><Menu size={18} /></button>
           <div className="crumbs"><span>PORTFOLIO</span><span className="slash">/</span><strong>{page && !page.closing ? sectionById(page.id).label.toUpperCase() : 'ASK SAGE-E'}</strong></div>
+          <button
+            ref={soundBtnRef}
+            className={`top-sound ${muted ? 'is-muted' : ''}`}
+            onClick={toggleSound}
+            aria-pressed={!muted}
+            aria-label={muted ? 'Turn sound on' : 'Turn sound off'}
+          >
+            {muted ? <VolumeX size={13} /> : <Volume2 size={13} />} {muted ? 'Sound off' : 'Sound on'}
+          </button>
           <a className="top-resume" href={profile.resume} download="Sagar_Bhasate_Resume.pdf"><Download size={13} /> Resume</a>
         </header>
 
@@ -242,10 +259,12 @@ export default function App() {
                 paused={pageCovers}
                 reducedMotion={reducedMotion}
                 lookAt={() => inputRef.current?.getBoundingClientRect()}
+                hangTarget={() => soundBtnRef.current?.getBoundingClientRect()}
+                climbSurface={() => chatRef.current?.getBoundingClientRect()}
                 className="home-bot"
               />
 
-              <section className="chat" aria-label="Conversation with SAGE-E">
+              <section ref={chatRef} className="chat" aria-label="Conversation with SAGE-E">
                 <div className="chat-scroll" ref={scrollRef} aria-live="polite">
                   {messages.map((m) => (
                     <div key={m.id} className={`msg msg-${m.role}`}>
